@@ -10,6 +10,8 @@ jobs:
   hello_world:
     runs-on: ubuntu-latest
     steps:
-      - name: Echo the message
+      - name: Echo the message #- Identifica que es un nuevo item dentro de steps
         run: |
           echo "Hello world!"
+      - name :  Get date
+        run: ls -l
