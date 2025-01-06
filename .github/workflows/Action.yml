@@ -1,31 +1,36 @@
-name: Angular 15
+# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+
+name: Node.js CI
 
 on:
   push:
-    branches: ["main"]
+    branches: [ "master" ]
   pull_request:
-    branches: ["main"]
+    branches: [ "master" ]
 
 jobs:
-  deploy:
+  build:
+
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.21.3]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+
     steps:
-      - uses: actions/checkout@v4
-      - name: Use Node.js 
-        uses: actions/setup-node@v4
-        with:
-          node-version: 14.21.3
-          cache: 'npm'
-          cache-dependency-path: package-lock.json
-      - name: Install Dependencies
-        run: npm ci #--no-audit --no-fund  --no-optional
-      - name: Build
-        run: npm run build
-        # npm install --no-audit --no-fund  --no-optional
-      #- name: Echo the message       #- Identifica que es un nuevo item dentro de steps
-      #  run: |
-      #    echo "Hello world!"
-      #- name :  Get date
-      #  run: date
-      #- name : Files
-      #  run: ls -l
+    - uses: actions/checkout@v4
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        cache-dependency-path: package-lock.json
+    - run: npm ci
+
+    - name: Run Test
+      run: npm run test:ci
+
+    - name: Build
+      run: npm run build
