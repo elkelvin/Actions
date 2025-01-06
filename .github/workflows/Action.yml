@@ -7,11 +7,25 @@ on:
     branches: ["main"]
 
 jobs:
-  hello_world:
+  deploy:
     runs-on: ubuntu-latest
     steps:
-      - name: Echo the message #- Identifica que es un nuevo item dentro de steps
-        run: |
-          echo "Hello world!"
-      - name :  Get date
-        run: ls -l
+      - uses: actions/checkout@v4
+      - name: Use Node.js 
+        uses: actions/setup-node@v4
+        with:
+          node-version: 14.21.3
+          cache: 'npm'
+          cache-dependency-path: package-lock.json
+      - name: Install Dependencies
+        run: npm ci --no-audit --no-fund  --no-optional
+      - name: Build
+        run: npm run build
+        # npm install --no-audit --no-fund  --no-optional
+      #- name: Echo the message       #- Identifica que es un nuevo item dentro de steps
+      #  run: |
+      #    echo "Hello world!"
+      #- name :  Get date
+      #  run: date
+      #- name : Files
+      #  run: ls -l
